@@ -1,0 +1,8 @@
+{
+  "name": "operator_skill",
+  "source": "operator",
+  "destination": "skill",
+  "type": "hasmany",
+  "foreignkey": "skill_id",
+  "associationforeinkey": "operator_id"
+}

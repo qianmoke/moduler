@@ -1,0 +1,757 @@
+---
+swagger: "2.0"
+info:
+  description: "K2data moduler"
+  version: "v1"
+  title: "K2data moduler"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "ludun@k2data.com.cn"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "127.0.0.1:8080"
+basePath: "/api/v1"
+tags:
+- name: "entities"
+  description: "entity in moduler"
+- name: "relations"
+  description: "relation between entity"
+- name: "dml"
+  description: "crud to fields of a entity"
+schemes:
+- "https"
+- "http"
+paths:
+  /entities:
+    get:
+      tags:
+      - "entities"
+      summary: "List all entities"
+      operationId: "controllers.entities_controller.list_entity"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "ok!"
+          schema:
+            $ref: "#/definitions/entities"
+        401:
+          description: "not authorized!"
+        403:
+          description: "permission deniend!"
+      x-tags:
+      - tag: "entities"
+  /entities/{entity_name}:
+    get:
+      tags:
+      - "entities"
+      summary: "Get entity by name"
+      description: "Returns a single entity"
+      operationId: "controllers.entities_controller.get_entity"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "entity_name"
+        in: "path"
+        description: "entity name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "ok!"
+          schema:
+            $ref: "#/definitions/entity"
+        401:
+          description: "not authorized!"
+        403:
+          description: "permission deniend!"
+        404:
+          description: "invalid name supplied, not found!"
+      x-tags:
+      - tag: "entities"
+    post:
+      tags:
+      - "entities"
+      summary: "create a entity from data"
+      operationId: "controllers.entities_controller.create_entity"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "entity_name"
+        in: "path"
+        description: "name of entity that needs to be created"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "entity object that needs to be created"
+        required: true
+        schema:
+          $ref: "#/definitions/entity"
+      responses:
+        200:
+          description: "ok!"
+          schema:
+            $ref: "#/definitions/entity"
+        400:
+          description: "invalid name supplied, already existed!"
+        401:
+          description: "not authorized!"
+        403:
+          description: "permission deniend!"
+      x-tags:
+      - tag: "entities"
+    put:
+      tags:
+      - "entities"
+      summary: "Updates a entity with data"
+      operationId: "controllers.entities_controller.update_entity"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "entity_name"
+        in: "path"
+        description: "name of entity that needs to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "entity object that needs to be updated"
+        required: true
+        schema:
+          $ref: "#/definitions/entity"
+      responses:
+        200:
+          description: "ok!"
+          schema:
+            $ref: "#/definitions/entity"
+        401:
+          description: "not authorized!"
+        403:
+          description: "permission deniend!"
+        404:
+          description: "invalid name supplied, not found!"
+      x-tags:
+      - tag: "entities"
+    delete:
+      tags:
+      - "entities"
+      summary: "Deletes a entity"
+      operationId: "controllers.entities_controller.delete_entity"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "entity_name"
+        in: "path"
+        description: "entity name to delete"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "ok!"
+        401:
+          description: "not authorized!"
+        403:
+          description: "permission deniend!"
+        404:
+          description: "invalid name supplied, not found!"
+      x-tags:
+      - tag: "entities"
+  /entities/{entity_name}/fields:
+    get:
+      tags:
+      - "entities"
+      summary: "List fields of a entity"
+      operationId: "controllers.entities_controller.list_field"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "entity_name"
+        in: "path"
+        description: "name of entity to list fields"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "ok!"
+          schema:
+            $ref: "#/definitions/fields"
+        401:
+          description: "not authorized!"
+        403:
+          description: "permission deniend!"
+        404:
+          description: "invalid name supplied, not found!"
+      x-tags:
+      - tag: "entities"
+  /entities/{entity_name}/fields/{field_id}:
+    get:
+      tags:
+      - "entities"
+      summary: "get field by field_id"
+      operationId: "controllers.entities_controller.get_field"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "entity_name"
+        in: "path"
+        description: "name of entity to get field"
+        required: true
+        type: "string"
+      - name: "field_id"
+        in: "path"
+        description: "ID of field to get"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "ok!"
+          schema:
+            $ref: "#/definitions/field"
+        401:
+          description: "not authorized!"
+        403:
+          description: "permission deniend!"
+        404:
+          description: "invalid name supplied, not found!"
+      x-tags:
+      - tag: "entities"
+    post:
+      tags:
+      - "entities"
+      summary: "create a field of entity from data"
+      operationId: "controllers.entities_controller.create_field"
+      consumes:
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "entity_name"
+        in: "path"
+        description: "name of entity which has field to be created"
+        required: true
+        type: "string"
+      - name: "field_id"
+        in: "path"
+        description: "ID of field to be created"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "field object that needs to be created"
+        required: true
+        schema:
+          $ref: "#/definitions/field"
+      responses:
+        200:
+          description: "ok!"
+        400:
+          description: "invalid name supplied, already existed!"
+        401:
+          description: "not authorized!"
+        403:
+          description: "permission deniend!"
+        404:
+          description: "invalid name supplied, not found!"
+      x-tags:
+      - tag: "entities"
+    put:
+      tags:
+      - "entities"
+      summary: "update a field of entity from data"
+      operationId: "controllers.entities_controller.update_field"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "entity_name"
+        in: "path"
+        description: "Name of entities to update"
+        required: true
+        type: "string"
+      - name: "field_id"
+        in: "path"
+        description: "ID of entities to update"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "field object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/field"
+      responses:
+        200:
+          description: "ok!"
+        400:
+          description: "invalid name supplied, already existed!"
+        401:
+          description: "not authorized!"
+        403:
+          description: "permission deniend!"
+        404:
+          description: "invalid name supplied, not found!"
+      x-tags:
+      - tag: "entities"
+    delete:
+      tags:
+      - "entities"
+      summary: "delete a field of entity"
+      operationId: "controllers.entities_controller.delete_field"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "entity_name"
+        in: "path"
+        description: "name of entities to update"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "field_id"
+        in: "path"
+        description: "ID of entities to update"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "ok!"
+        400:
+          description: "invalid name supplied, already existed!"
+        401:
+          description: "not authorized!"
+        403:
+          description: "permission deniend!"
+        404:
+          description: "invalid name supplied, not found!"
+      x-tags:
+      - tag: "entities"
+  /relations:
+    get:
+      tags:
+      - "relations"
+      summary: "List all relations"
+      operationId: "controllers.relations_controller.list_relation"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "ok!"
+          schema:
+            $ref: "#/definitions/relations"
+        401:
+          description: "not authorized!"
+        403:
+          description: "permission deniend!"
+      x-tags:
+      - tag: "relations"
+  /relations/{name}:
+    get:
+      tags:
+      - "relations"
+      summary: "Get relation by name"
+      description: "Returns a single relation"
+      operationId: "controllers.relations_controller.get_relation"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "name"
+        in: "path"
+        description: "return a relations by name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "ok!"
+          schema:
+            $ref: "#/definitions/relation"
+        401:
+          description: "not authorized!"
+        403:
+          description: "permission deniend!"
+        404:
+          description: "invalid name supplied, not found!"
+      x-tags:
+      - tag: "relations"
+    post:
+      tags:
+      - "relations"
+      summary: "create a relation from data"
+      operationId: "controllers.relations_controller.create_relation"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "name"
+        in: "path"
+        description: "Name of relation that needs to be created"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "relation object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/relation"
+      responses:
+        200:
+          description: "ok!"
+        400:
+          description: "invalid name supplied, already existed!"
+        401:
+          description: "not authorized!"
+        403:
+          description: "permission deniend!"
+      x-tags:
+      - tag: "relations"
+    put:
+      tags:
+      - "relations"
+      summary: "Updates a relations from data"
+      operationId: "controllers.relations_controller.update_relation"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "name"
+        in: "path"
+        description: "Name of relation that need to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "relations object that needs to be updated"
+        required: true
+        schema:
+          $ref: "#/definitions/relation"
+      responses:
+        200:
+          description: "ok!"
+        401:
+          description: "not authorized!"
+        403:
+          description: "permission deniend!"
+        404:
+          description: "invalid name supplied, not found!"
+      x-tags:
+      - tag: "relations"
+    delete:
+      tags:
+      - "relations"
+      summary: "Deletes a relation"
+      operationId: "controllers.relations_controller.delete_relation"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "name"
+        in: "path"
+        description: "relations name to delete"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "ok!"
+        401:
+          description: "not authorized!"
+        403:
+          description: "permission deniend!"
+        404:
+          description: "invalid name supplied, not found!"
+      x-tags:
+      - tag: "relations"
+  /dml/{entity_name}:
+    get:
+      tags:
+      - "dml"
+      summary: "list records of a entity"
+      operationId: "controllers.dml_controller.list_record"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "entity_name"
+        in: "path"
+        description: "name of entity to list"
+        required: true
+        type: "string"
+      - name: "param"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "limit"
+        in: "query"
+        description: "The numbers of items to return."
+        required: false
+        type: "integer"
+      responses:
+        200:
+          description: "ok!"
+          schema:
+            $ref: "#/definitions/records"
+        401:
+          description: "not authorized!"
+        403:
+          description: "permission deniend!"
+      x-tags:
+      - tag: "dml"
+  /dml/{entity_name}/{record_id}:
+    get:
+      tags:
+      - "dml"
+      summary: "read field  of a entity by field id"
+      operationId: "controllers.dml_controller.get_record"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "entity_name"
+        in: "path"
+        description: "Name of entities to update"
+        required: true
+        type: "string"
+      - name: "record_id"
+        in: "path"
+        description: "ID of field to get"
+        required: true
+        type: "string"
+      - name: "param"
+        in: "query"
+        required: false
+        type: "string"
+      - name: "limit"
+        in: "query"
+        description: "The numbers of items to return."
+        required: false
+        type: "integer"
+      responses:
+        200:
+          description: "ok!"
+          schema:
+            $ref: "#/definitions/record"
+        401:
+          description: "not authorized!"
+        403:
+          description: "permission deniend!"
+        404:
+          description: "invalid name supplied, not found!"
+      x-tags:
+      - tag: "dml"
+    post:
+      tags:
+      - "dml"
+      summary: "create record of a entity"
+      operationId: "controllers.dml_controller.create_record"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "entity_name"
+        in: "path"
+        description: "ID of entities to update"
+        required: true
+        type: "integer"
+        format: "string"
+      - name: "record_id"
+        in: "path"
+        description: "ID of field to get"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "record object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/record"
+      responses:
+        200:
+          description: "ok!"
+        400:
+          description: "invalid name supplied, already existed!"
+        401:
+          description: "not authorized!"
+        403:
+          description: "permission deniend!"
+        404:
+          description: "invalid name supplied, not found!"
+      x-tags:
+      - tag: "dml"
+    put:
+      tags:
+      - "dml"
+      summary: "update record of a entity"
+      operationId: "controllers.dml_controller.update_record"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "entity_name"
+        in: "path"
+        description: "name of entities to update record"
+        required: true
+        type: "string"
+      - name: "record_id"
+        in: "path"
+        description: "ID of field to get"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "record object that needs to be updated"
+        required: true
+        schema:
+          $ref: "#/definitions/record"
+      responses:
+        200:
+          description: "ok!"
+        401:
+          description: "not authorized!"
+        403:
+          description: "permission deniend!"
+        404:
+          description: "invalid name supplied, not found!"
+      x-tags:
+      - tag: "dml"
+    delete:
+      tags:
+      - "dml"
+      summary: "delete fields of a entity"
+      operationId: "controllers.dml_controller.delete_record"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "entity_name"
+        in: "path"
+        description: "delete fields data of entities to update"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "record_id"
+        in: "path"
+        description: "ID of field to get"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "ok!"
+        401:
+          description: "not authorized!"
+        403:
+          description: "permission deniend!"
+        404:
+          description: "invalid name supplied, not found!"
+      x-tags:
+      - tag: "dml"
+definitions:
+  field:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      type:
+        type: "string"
+      is_primary:
+        type: "boolean"
+      is_not_null:
+        type: "boolean"
+      default_value:
+        type: "string"
+      description:
+        type: "string"
+  fields:
+    type: "object"
+    properties:
+      fields:
+        type: "array"
+        items:
+          $ref: "#/definitions/field"
+  entities:
+    type: "object"
+    properties:
+      entities:
+        type: "array"
+        items:
+          $ref: "#/definitions/entity"
+  entity:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      name:
+        type: "string"
+        example: "operator"
+      fields:
+        type: "array"
+        items:
+          $ref: "#/definitions/field"
+  records:
+    type: "object"
+    properties:
+      records:
+        type: "array"
+        items:
+          $ref: "#/definitions/record"
+  record:
+    type: "object"
+    properties:
+      field:
+        type: "string"
+  relations:
+    type: "object"
+    properties:
+      relations:
+        type: "array"
+        items:
+          $ref: "#/definitions/relation"
+  relation:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      name:
+        type: "string"
+        example: "operator"
+      source:
+        type: "string"
+      destination:
+        type: "string"
+      type:
+        type: "string"
+        enum:
+        - "belongsto"
+        - "hasone"
+        - "hasmany"
+        - "many2many"
+      foreignkey:
+        type: "string"
+      associationforeinkey:
+        type: "string"
+externalDocs:
+  description: "Find out more about k2data"
+  url: "http://www.k2data.com.cn"

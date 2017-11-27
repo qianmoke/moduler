@@ -1,0 +1,21 @@
+{
+  "name": "operator",
+  "fields": [
+    {
+      "name": "operator_id",
+      "type": "Integer",
+      "primary": true,
+      "default_value": "test",
+      "description": "name of operator",
+      "is_not_null":"true"
+    },
+    {
+      "name": "name",
+      "type": "test",
+      "primary": false,
+      "default_value": "test",
+      "description": "name of operator",
+      "is_not_null":"true"
+    }
+  ]
+}
